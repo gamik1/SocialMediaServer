@@ -10,15 +10,20 @@
   "author": "Group_3_Capstone_Section_1",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "express-requests-logger": "^3.0.4",
     "helmet": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
-    "mongoose": "^6.6.1",
+    "mongoose": "^6.6.5",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   }
 }
