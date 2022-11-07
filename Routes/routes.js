@@ -9,8 +9,8 @@ router.post(
   passport.authenticate('signup', { session: false }),
   async (req, res, next) => {
     res.json({
-      message: 'Signup successful',
-      user: req.user
+      message: 'Signup Request Received',
+      registerResponse: req.user
     });
   }
 );

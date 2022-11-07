@@ -31,13 +31,9 @@ app.use(bodyParser.json());
 app.use('/', routes);
 
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-app.use('/user', passport.authenticate('jwt', { session: false }), secureRoute);
+app.use('/user' ,passport.authenticate('jwt', { session: false }), secureRoute);
 
-// Handle errors.
-// app.use(function(err, req, res, next) {
-//   res.status(err.status || 500);
-//   res.json({ error: err });
-// });
+
 
 
 app.listen(port, ()=> console.log(`Social Media Server Started -- on port ${port}!`));

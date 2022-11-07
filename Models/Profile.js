@@ -6,18 +6,29 @@ const ProfileSchema = new Schema({
     _user_Id: {
         type: Schema.Types.ObjectId, ref: 'User'
     },
-  FirstName: {
+  firstName: {
     type: String,
     required: true
   },
-  LastName: {
+  lastName: {
     type: String,
     required: true
   },
-  Description: {
+  dob: {
+    type: Date,
+    required: true
+  },
+  bio: {
+    type: String
+  },
+  profession: {
+    type: String
+  },
+  hobby: {
     type: String
   }
 });
+
 
 
 const ProfileModel = mongoose.model('userProfile', ProfileSchema);
