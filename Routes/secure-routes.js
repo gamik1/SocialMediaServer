@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ProfileModel = require("../Models/Profile"); 
+const PostModel = require("../Models/Post"); 
 
 router.post(
   '/profile',
@@ -33,5 +34,43 @@ router.get(
     })
   }
 );
+
+
+router.post(
+  '/post/add',
+  async (req, res, next) => {
+    console.log(req.body)
+    const post = req.body; 
+    
+    const newPost = await PostModel.create({_user_Id: req.user._id, postContent: post['post-text']}) ;
+
+    res.json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      newPost: newPost != {} ? newPost : {error :" error"},
+      token: req.query.secret_token
+    });
+
+    console.log(newPost)
+
+    return newPost;
+  }
+);
+
+router.get(
+  '/post/list',
+  async (req, res, next) => {
+    const posts = await PostModel.find({});
+    console.log(posts);
+    res.status(200).json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      posts: posts ? posts : {user: req.user},
+      token: req.query.secret_token
+    })
+    return posts;
+  }
+);
+
 
 module.exports = router;
