@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
+
+
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),

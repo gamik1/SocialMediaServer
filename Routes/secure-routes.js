@@ -2,6 +2,25 @@ const express = require('express');
 const router = express.Router();
 const ProfileModel = require("../Models/Profile"); 
 const PostModel = require("../Models/Post"); 
+const multer = require('multer');
+
+const upload = multer({dest: "./public/uploads"});
+
+
+router.post("/upload-profile", upload.single('file'),async (req, res) => {
+  try {
+    console.log(req.file);
+    const imageAdded = await ProfileModel.updateOne({_user_Id: req.user._id},{displayImage: `${req.file.filename}`},{upsert: true});
+    if(imageAdded){
+      return res.status(200).json("File uploded successfully"); 
+    }else{
+      return res.status(200).json("File not uploded");
+    }
+    
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 router.post(
   '/profile',
@@ -71,6 +90,8 @@ router.get(
     return posts;
   }
 );
+
+
 
 
 module.exports = router;

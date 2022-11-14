@@ -18,6 +18,9 @@ const ProfileSchema = new Schema({
     type: Date,
     required: true
   },
+  displayImage: {
+    type: String
+  },
   bio: {
     type: String
   },
