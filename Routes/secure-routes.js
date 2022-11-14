@@ -12,6 +12,7 @@ router.post("/upload-profile", upload.single('file'),async (req, res) => {
     console.log(req.file);
     const imageAdded = await ProfileModel.updateOne({_user_Id: req.user._id},{displayImage: `${req.file.filename}`},{upsert: true});
     if(imageAdded){
+      console.log(imageAdded)
       return res.status(200).json("File uploded successfully"); 
     }else{
       return res.status(200).json("File not uploded");

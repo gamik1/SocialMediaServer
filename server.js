@@ -29,6 +29,7 @@ dotenv.config();
 // Configuring body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use("/images", express.static(path.join(__dirname, "public/uploads")));
 
