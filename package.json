@@ -10,6 +10,7 @@
   "author": "Group_3_Capstone_Section_1",
   "license": "ISC",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
