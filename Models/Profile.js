@@ -29,7 +29,7 @@ const ProfileSchema = new Schema({
   },
   hobby: {
     type: String
-  }
+  },
 });
 
 

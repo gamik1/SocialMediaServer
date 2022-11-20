@@ -78,10 +78,14 @@ router.post(
   async (req, res, next) => {
     console.log(req.body)
     const post = req.body;
+
     const filter = new Filter();
     post['post-text'] = filter.clean(post['post-text']);
 
-    const newPost = await PostModel.create({ _user_Id: req.user._id, postContent: post['post-text'] });
+
+    const userProfile = await ProfileModel.findOne({ _user_Id: req.user });
+    const newPost = await PostModel.create({ _user_Id: req.user._id,_user_name: `${userProfile.firstName} ${userProfile.lastName}`, postContent: post['post-text'] });
+
 
     res.json({
       message: 'You made it to the secure route',
@@ -135,9 +139,10 @@ router.post(
     const comment = req.body;
     const filter = new Filter();
     comment['comment-text'] = filter.clean(comment['comment-text']);
-
+    const userProfile = await ProfileModel.findOne({ _user_Id: req.user });
     const newComment = await PostModel.create({
       _user_Id: req.user._id,
+      _user_name: `${userProfile.firstName} ${userProfile.lastName}`,
       postContent: comment['comment-text'],
       commentTo: comment['post-id'],
       type: 'comment'
