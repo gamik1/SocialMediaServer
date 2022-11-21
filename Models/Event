@@ -1,0 +1,30 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const FriendSchema = new Schema({
+  _user_Id: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
+  askerId: {
+    type: Schema.Types.ObjectId,
+    ref: "User"
+  },
+  eventType: {
+    type: String,
+    default: 'friendRequest'
+  },
+  ref_Ids: [String],
+  processed: {
+    type: Boolean,
+    default: false
+  },
+  createDate: {
+    type: Date,
+    default: new Date()
+  }
+});
+
+const FriendModel = mongoose.model("event", FriendSchema);
+
+module.exports = FriendModel;
