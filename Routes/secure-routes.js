@@ -196,13 +196,13 @@ router.get(
   '/friend/profiles',
   async (req, res, next) => {
     const friend = await FriendModel.findOne({ _user_Id: req.user });
-    const profiles = await Promise.all(friend.friendIds.map(async (uid) => {
+    const profiles = friend ? await Promise.all(friend.friendIds.map(async (uid) => {
       const userProfile = await ProfileModel.findOne({ _user_Id: uid }).lean();
       const user = await UserModel.findById({ _id: userProfile._user_Id }).lean();
       delete user.password;
       const a = richProfile(userProfile, user);
       return a;
-    }))
+    })) : []
     // console.log(profiles);
     res.status(200).json({
       message: 'You made it to the secure route',
