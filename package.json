@@ -10,6 +10,8 @@
   "author": "Group_3_Capstone_Section_1",
   "license": "ISC",
   "dependencies": {
+    "@mui/lab": "^5.0.0-alpha.107",
+    "@paypal/react-paypal-js": "^7.8.1",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
