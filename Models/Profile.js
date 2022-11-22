@@ -7,16 +7,16 @@ const ProfileSchema = new Schema({
         type: Schema.Types.ObjectId, ref: 'User'
     },
   firstName: {
-    type: String,
-    required: true
+    type: String
   },
   lastName: {
-    type: String,
-    required: true
+    type: String
   },
   dob: {
-    type: Date,
-    required: true
+    type: Date
+  },
+  displayImage: {
+    type: String
   },
   bio: {
     type: String
@@ -26,7 +26,7 @@ const ProfileSchema = new Schema({
   },
   hobby: {
     type: String
-  }
+  },
 });
 
 

@@ -1,8 +1,25 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const ProfileModel = require('../Models/Profile');
 
 const router = express.Router();
+
+
+router.post(
+  '/others/profile',
+  async (req, res, next) => {
+    
+    const userProfile = await ProfileModel.findOne({ _user_Id: req.body });
+    res.json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      userProfile: userProfile ? userProfile : { user: req.user },
+      token: req.query.secret_token
+    })
+  }
+);
+
 
 router.post(
   '/signup',

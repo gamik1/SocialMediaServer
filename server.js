@@ -1,6 +1,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require("path");
 const cors = require('cors'); // Cross-Origin resource sharing
 const dotenv = require('dotenv');
 const helmet = require("helmet"); //Helmet helps you secure your Express apps by setting various HTTP headers.
@@ -10,6 +11,7 @@ const passport = require('passport');
 const routes = require('./routes/routes');
 const secureRoute = require('./routes/secure-routes');
 const UserModel = require('./Models/User');
+
 const app = express();
 const port = 8800;
 
@@ -27,6 +29,10 @@ dotenv.config();
 // Configuring body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+app.use("/images", express.static(path.join(__dirname, "public/uploads")));
+
 
 app.use('/', routes);
 
