@@ -8,8 +8,8 @@ const helmet = require("helmet"); //Helmet helps you secure your Express apps by
 const morgan = require('morgan'); // logger
 require('./Models/db');
 const passport = require('passport');
-const routes = require('./routes/routes');
-const secureRoute = require('./routes/secure-routes');
+const routes = require('./Routes/routes');
+const secureRoute = require('./Routes/secure-routes');
 const UserModel = require('./Models/User');
 
 const app = express();
