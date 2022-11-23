@@ -13,7 +13,7 @@ const secureRoute = require('./routes/secure-routes');
 const UserModel = require('./Models/User');
 
 const app = express();
-const port = 8800;
+const port = process.env.PORT || 8800;
 
 require("./Auth/auth");
 
