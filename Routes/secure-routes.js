@@ -49,7 +49,6 @@ router.get(
   '/profile',
   async (req, res, next) => {
     const userProfile = await ProfileModel.findOne({ _user_Id: req.user });
-    console.log(userProfile);
     res.json({
       message: 'You made it to the secure route',
       user: req.user,
