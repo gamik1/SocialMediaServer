@@ -199,7 +199,7 @@ router.get(
     const friend = await FriendModel.findOne({ _user_Id: req.user });
     const profiles = friend ? await Promise.all(friend.friendIds.map(async (uid) => {
       const userProfile = await ProfileModel.findOne({ _user_Id: uid }).lean();
-      const user = await UserModel.findById({ _id: userProfile._user_Id }).lean();
+      const user = await UserModel.findById({ _id: uid }).lean();
       delete user.password;
       const a = richProfile(userProfile, user);
       return a;
@@ -393,7 +393,7 @@ router.get(
 );
 
 function richProfile(userProfile, user) {
-  return userProfile.firstName
+  return userProfile && userProfile.firstName
     ? {
       ...userProfile,
       email: user.email,
