@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const GridFs = require('./GridFs');
 
 const Schema = mongoose.Schema;
 
@@ -16,7 +17,8 @@ const ProfileSchema = new Schema({
     type: Date
   },
   displayImage: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'GridFs'
   },
   bio: {
     type: String
