@@ -6,22 +6,7 @@ const ProfileModel = require('../Models/Profile');
 const router = express.Router();
 
 
-router.get("/image/profile/:id", (req, res) => {
-  const file = bucket
-    .find({
-      filename: req.params.filename
-    })
-    .toArray((err, files) => {
-      if (!files || files.length === 0) {
-        return res.status(404)
-          .json({
-            err: "no files exist"
-          });
-      }
-      bucket.openDownloadStreamByName(req.params.id)
-        .pipe(res);
-    });
-});
+
 
 router.post(
   '/others/profile',
