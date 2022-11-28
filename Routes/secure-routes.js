@@ -154,6 +154,20 @@ router.get(
   }
 );
 
+router.get(
+  '/allUsers',
+  async (req, res, next) => {
+    const users = await (await ProfileModel.find({ }).populate('_user_Id',"email"));
+    // console.log(posts);
+    res.status(200).json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      users: users ? users : [],
+      token: req.query.secret_token
+    })
+    return users;
+  }
+);
 
 router.post(
   '/comment/add',
