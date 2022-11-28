@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const GridFs = require('./GridFs');
+const UserModel  =require('./User');
 
 const Schema = mongoose.Schema;
 
 const ProfileSchema = new Schema({
     _user_Id: {
-        type: Schema.Types.ObjectId, ref: 'User'
+        type: Schema.Types.ObjectId, ref: 'user'
     },
   firstName: {
     type: String
@@ -16,7 +18,8 @@ const ProfileSchema = new Schema({
     type: Date
   },
   displayImage: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'GridFs'
   },
   bio: {
     type: String

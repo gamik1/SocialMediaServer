@@ -6,18 +6,33 @@ const PostModel = require("../Models/Post");
 const FriendModel = require("../Models/Friend");
 const EventModel = require("../Models/Event");
 const multer = require('multer');
+const {
+  GridFsStorage
+} = require("multer-gridfs-storage");
 const Filter = require('bad-words');
 
-const upload = multer({ dest: "./public/uploads" });
 
-
+const storage = new GridFsStorage({
+  url: process.env.MONGO_DB,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      const filename = file.originalname;
+      const fileInfo = {
+        filename: filename,
+        bucketName: "newBucket"
+      };
+      resolve(fileInfo);
+    });
+  }
+});
+const upload = multer({ storage });
 router.post("/upload-profile", upload.single('file'), async (req, res) => {
   try {
     console.log(req.file);
-    const imageAdded = await ProfileModel.updateOne({ _user_Id: req.user._id }, { displayImage: `${req.file.filename}` }, { upsert: true });
+    const imageAdded = await ProfileModel.updateOne({ _user_Id: req.user._id }, { displayImage: `${req.file.id}` }, { upsert: true });
     if (imageAdded) {
       console.log(imageAdded)
-      return res.status(200).json("File uploded successfully");
+      return res.status(200).json({id: req.file.id, message: "File uploded successfully"});
     } else {
       return res.status(200).json("File not uploded");
     }
@@ -26,6 +41,13 @@ router.post("/upload-profile", upload.single('file'), async (req, res) => {
     console.error(error);
   }
 });
+
+// router.post("/upload", upload.single("file"), (req, res) => {
+//   console.log(res);
+//   res.status(200)
+//     .json({data: res.file, message: "File uploaded successfully"});
+
+// });
 
 router.post(
   '/profile',
@@ -132,6 +154,20 @@ router.get(
   }
 );
 
+router.get(
+  '/allUsers',
+  async (req, res, next) => {
+    const users = await (await ProfileModel.find({ }).populate('_user_Id',"email"));
+    // console.log(posts);
+    res.status(200).json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      users: users ? users : [],
+      token: req.query.secret_token
+    })
+    return users;
+  }
+);
 
 router.post(
   '/comment/add',
@@ -199,7 +235,7 @@ router.get(
     const friend = await FriendModel.findOne({ _user_Id: req.user });
     const profiles = friend ? await Promise.all(friend.friendIds.map(async (uid) => {
       const userProfile = await ProfileModel.findOne({ _user_Id: uid }).lean();
-      const user = await UserModel.findById({ _id: userProfile._user_Id }).lean();
+      const user = await UserModel.findById({ _id: uid }).lean();
       delete user.password;
       const a = richProfile(userProfile, user);
       return a;
@@ -393,7 +429,7 @@ router.get(
 );
 
 function richProfile(userProfile, user) {
-  return userProfile.firstName
+  return userProfile && userProfile.firstName
     ? {
       ...userProfile,
       email: user.email,
