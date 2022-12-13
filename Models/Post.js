@@ -12,8 +12,12 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
+  postImage: {
+    type: Schema.Types.ObjectId,
+    ref: 'GridFs'
+  },
   likes: {
-    type: String,
+    type: [Schema.Types.ObjectId],
     required: false,
   },
   createDate: {

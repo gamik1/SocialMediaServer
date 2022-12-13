@@ -1,4 +1,5 @@
 const express = require('express');
+const ObjectId = require('mongodb').ObjectId;
 const router = express.Router();
 const UserModel = require("../Models/User");
 const ProfileModel = require("../Models/Profile");
@@ -6,6 +7,7 @@ const PostModel = require("../Models/Post");
 const FriendModel = require("../Models/Friend");
 const EventModel = require("../Models/Event");
 const multer = require('multer');
+const moment = require('moment');
 const {
   GridFsStorage
 } = require("multer-gridfs-storage");
@@ -26,6 +28,7 @@ const storage = new GridFsStorage({
   }
 });
 const upload = multer({ storage });
+
 router.post("/upload-profile", upload.single('file'), async (req, res) => {
   try {
     console.log(req.file);
@@ -99,15 +102,39 @@ router.get(
 );
 
 
+router.post("/post/image-post", upload.single('file'), async (req, res) => {
+  
+  try {
+    console.log(req.file);
+    const post = req.body;
+    const filter = new Filter();
+    post['post-text'] = filter.clean(post['post-text']);
+    const newPost = await PostModel.create({ _user_Id: req.user._id, postImage: `${req.file.id}` , postContent: post['post-text'], createDate: new Date()});
+    
+    res.json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      newPost: newPost != {} ? newPost : { error: " error" },
+      token: req.query.secret_token
+    });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      newPost: { error: " error" },
+      token: req.query.secret_token
+    });
+  }
+});
+
 router.post(
-  '/post/add',
-  async (req, res, next) => {
+  '/post/add', async (req, res, next) => {
     console.log(req.body)
     const post = req.body;
     const filter = new Filter();
     post['post-text'] = filter.clean(post['post-text']);
-
-    const newPost = await PostModel.create({ _user_Id: req.user._id, postContent: post['post-text'] });
+    const newPost = await PostModel.create({ _user_Id: req.user._id, postContent: post['post-text'], createDate: new Date()});
 
     res.json({
       message: 'You made it to the secure route',
@@ -197,6 +224,27 @@ router.post(
   }
 );
 
+router.post(
+    '/like/add',
+    async (req, res, next) => {
+    
+    const newLike = await PostModel.updateOne({
+      _id: req.body.post_id
+    },{$push:{likes: req.user._id}});
+    await PostModel.findByIdAndUpdate({ _id: req.body.post_id }, { $inc: { countOfLike: 1 } });
+
+    res.json({
+      message: 'You made it to the secure route',
+      user: req.user,
+      newlike: newLike != {} ? newLike : { error: " error" },
+      token: req.query.secret_token
+    });
+
+    console.log(newLike)
+
+    return newLike;
+  }
+);
 
 router.get(
   '/post/comments/:pid',
