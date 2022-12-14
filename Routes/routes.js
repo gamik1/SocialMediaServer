@@ -34,6 +34,35 @@ router.post(
   }
 );
 
+// router.post("/login", async (req, res, next) => {
+  
+//   passport.authenticate("login", async (err, user, info) => {
+//     try {
+//       if (err || !user) {
+//         res.json({
+//           status: false,
+//           error: info.message,
+//         });
+//         console.log(info);
+//       } else {
+//         req.login(user, { session: false }, async (error) => {
+//           if (error) res.json({ status: false, error: error });
+
+//           const body = { _id: user._id, email: user.email };
+//           const token = jwt.sign({ user: body }, "TOP_SECRET", {
+//             expiresIn: 3600,
+//           });
+
+//           return res.json({ token });
+         
+//         });
+//       }
+//     } catch (error) {
+//       res.json({ status: false, error: error });
+//     }
+//   })(req, res, next);
+// });
+
 
 router.post(
   '/login',
@@ -43,11 +72,10 @@ router.post(
       async (err, user, info) => {
         try {
           if (err || !user) {
-            const error = new Error('An error occurred.');
-
-            return next(error);
+            //const error = new Error({message: info.message});
+            return next(info.message);
           }
-
+          
           req.login(
             user,
             { session: false },
@@ -57,15 +85,18 @@ router.post(
               const body = { _id: user._id, email: user.email };
               const token = jwt.sign({ user: body }, 'TOP_SECRET');
 
-              return res.json({ token });
+              return res.json({token});
             }
           );
+          
         } catch (error) {
           return next(error);
         }
       }
     )(req, res, next);
+  
   }
+  
 );
 
 
